@@ -1,0 +1,104 @@
+\input{preamble.tex}
+
+
+\begin{document}
+
+\input{class_lecture_firstslide.tex}
+
+\scriptsize
+
+\begin{frame}[fragile]
+\frametitle{{\tt \Red class} in \location}
+
+\mbox{}\\\mbox{}\\
+What to expect in this first lecture:
+\vspace*{0.5\baselineskip}\mbox{}
+\bgroup 
+\def\arraystretch{1.15}
+\begin{tabular}{lll}
+$\bullet$&Basics:& Why use {\Red \tt class}?\\
+$\bullet$&Usage:& Installation\\
+$\bullet$&Usage:& Terminal\\
+$\bullet$&Usage:& Plotting\\
+$\bullet$&Usage:& Python/Jupyter \\
+$\bullet$&Usage:& Samplers \\
+$\bullet$&Basics:& Existing Species \\
+$\bullet$&Basics:& Module Overview \\
+\end{tabular}
+\egroup
+
+\mbox{}\\
+We will learn {\Red how to use \tt class} and {\Red which models} can be run with it.\\\mbox{}\\
+% \begin{center}\includegraphics[width=8cm,angle=0]{logo-ecole-300.png}\end{center}
+
+\end{frame}
+
+%\begin{frame}[fragile]
+%\frametitle{Context}
+%{\tt \Red class} is the 5th public Einstein-Boltzmann solver covering all basic cosmology:
+%\begin{enumerate}
+%\item
+%{\Red COSMICS} package in f77 (Bertschinger 1995)\\
+%Basic equations, brute-force $C_l^{TT}$
+%%\pause
+%\item
+%{\Red CMBFAST} in f77 (Seljak \& Zaldarriaga 1996)\\
+%Line-of-sight, $C_l^{EE,TE, BB}$, open universe, CMB lensing
+%%\pause
+%\item
+%{\Red CAMB} in f90/2000 (Lewis \& Challinor 1999)\\
+%closed universe, better lensing, new algorithms, new approximations, new species, new observables...
+%(\url{http://camb.info})
+%%\pause
+%\item
+%{\Red CMBEASY} in C++ (Doran 2003)
+%%\pause
+%\item
+%{\tt \Red class} in C (Lesgourgues \& Tram 2011)\\
+%simpler polarisation equations, new algorithms, new approximations, new species, new observables...
+%(\url{http://class-code.net})
+%\end{enumerate}
+%... and there might still be 1 or 2 more!
+%But only {\Red CAMB} and {\tt \Red class} are currently developed and kept to high precision level.
+%\end{frame}
+
+%
+%\begin{frame}[fragile]
+%\frametitle{Module structure of {\tt \Red class}}
+%
+%The \cinline{main(command-line-args)} function of CLASS located in \cinline{main/class.c} could only contain:
+%\begin{class}
+%int main(args) {
+%  input_init(args,ppr,pba,pth,ppt,ptr,ppm,pha,pfo,ple,pop);
+%  background_init(ppr,pba);
+%  thermodynamics_init(ppr,pba,pth); 
+%  perturbations_init(ppr,pba,pth,ppt);
+%  primordial_init(ppr,ppt,ppm);
+%  fourier_init(ppr,pba,pth,ppt,ppm,pfo);
+%  transfer_init(ppr,pba,pth,ppt,pfo,ptr);
+%  harmonic_init(ppr,pba,ppt,ppm,pfo,ptr,pha);
+%  lensing_init(ppr,ppt,pha,pfo,ple);
+%  distortions_init(ppr,pba,pth,ppt,pha,pfo,psd);
+%  output_init(pba,pth,ppt,ppm,ptr,pha,pfo,ple,pop);
+%  /* all calculations done, free the structures */
+%  lensing_free(ple);
+%  distortions_free(psd);
+%  harmonic_free(pha);
+%  transfer_free(ptr);
+%  fourier_free(pfo);
+%  primordial_free(ppm);
+%  perturbations_free(ppt);
+%  thermodynamics_free(pth);
+%  background_free(pba);
+%}
+%\end{class}
+%Of course we also need error management!
+%\end{frame}
+
+
+
+
+
+
+
+\end{document}

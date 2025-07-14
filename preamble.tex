@@ -1,0 +1,295 @@
+\documentclass[dvipsnames]{beamer}
+\mode<presentation>
+\usepackage{graphicx}
+\usepackage{wasysym}
+\usepackage{hyperref}
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{scalerel,stackengine,amsmath}
+
+\usepackage{ulem}
+\def\Put(#1,#2)#3{\leavevmode\makebox(0,0){\put(#1,#2){#3}}}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,chains}
+\usetikzlibrary{positioning,decorations.pathreplacing}
+\usetikzlibrary{fit,shapes.misc}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\tikzset{
+	startstop/.style={
+		rectangle, 
+		rounded corners,
+		minimum width=3cm, 
+		minimum height=1cm,
+		align=center, 
+		draw=black, 
+		fill=red!30
+	},
+	process/.style={
+		rectangle, 
+		minimum width=3cm, 
+		minimum height=1cm, 
+		align=center, 
+		draw=black, 
+		fill=blue!30
+	},
+	decision/.style={
+		rectangle, 
+		minimum width=3cm, 
+		minimum height=1cm, align=center, 
+		draw=black, 
+		fill=green!30
+	},
+	arrow/.style={thick,->,>=stealth},
+	dec/.style={
+		ellipse, 
+		align=center, 
+		draw=black, 
+		fill=green!30
+	},
+}
+\tikzset{cross/.style={cross out, draw, 
+		minimum size=2*(#1-\pgflinewidth), 
+		inner sep=0pt, outer sep=0pt,color=red},
+	decoration={brace},
+	tuborg/.style={decorate}}
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt=#1{}{invisible}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}  
+
+
+\usepackage{geometry}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{listliketab} %make itemize env behaving like tables !
+\usepackage{listings}
+\usepackage{setspace}
+\usepackage{color}
+% General Colors
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+% Colors for Python
+\definecolor{Code}{rgb}{0,0,0}
+\definecolor{Decorators}{rgb}{0.5,0.5,0.5}
+\definecolor{Numbers}{rgb}{0.5,0,0}
+\definecolor{MatchingBrackets}{rgb}{0.25,0.5,0.5}
+\definecolor{Keywords}{rgb}{0,0,0.5}
+\definecolor{Strings}{rgb}{0,0.63,0}
+\definecolor{Comments}{rgb}{0.4,0.4,0.4}
+\definecolor{Backquotes}{rgb}{0,0,0}
+\definecolor{Classname}{rgb}{0,0,0}
+\definecolor{FunctionName}{rgb}{0,0,0}
+\definecolor{Operators}{rgb}{0,0,0}
+\definecolor{Background}{rgb}{0.93,0.93,0.93}
+
+\definecolor{RWTHbluedark}{RGB}{0,84,159}
+\definecolor{RWTHbluelight}{RGB}{142,186,229}
+\definecolor{RWTHmagenta}{RGB}{227,0,102}
+\definecolor{RWTHmagentalight}{RGB}{249,210,218}
+\definecolor{RWTHyellow}{RGB}{255,237,0}
+\definecolor{RWTHorange}{RGB}{246,168,0}
+\definecolor{RWTHred}{RGB}{204,7,30}
+\definecolor{RWTHgreen}{RGB}{87,171,39}
+\definecolor{RWTHlila}{RGB}{122,111,172}
+\definecolor{RWTHbordeaux}{RGB}{161,16,53}
+
+
+\newcommand{\self}{\color{CadetBlue}}
+
+
+\usepackage{epstopdf}
+%\usepackage[urlcolor=magenta]{hyperref}
+\usepackage{hyperref}
+\usepackage{wasysym}
+\hypersetup{urlcolor=magenta}
+
+
+
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+showspaces=false,
+showtabs=false,
+showstringspaces=false,
+tabsize=2,
+breaklines=true,
+% Basic
+%basicstyle=\ttfamily\footnotesize\setstretch{1},
+basicstyle=\ttfamily\footnotesize\color{black},
+backgroundcolor=\color{Background},
+language=Python,
+% Comments
+commentstyle=\color{Comments}\slshape,
+% Strings
+stringstyle=\color{Strings},
+morecomment=[s][\color{Comments}]{"""}{"""},
+morecomment=[s][\color{Strings}]{'''}{'''},
+morecomment=[l][\color{BurntOrange}]{\@},
+% keywords
+keywordstyle={\color{Keywords}\bfseries},
+keywordstyle=[2]{\color{Magenta}\bfseries},
+keywordstyle=[3]{\color{deepred}\bfseries},
+keywords={from,class,def,for,while,if,is,in,elif,else,not,and,or,print,break,continue,return,True,False,None,access,as,del,except,exec,finally,global,lambda,pass,print,raise,try,assert},
+% additional keywords
+keywords=[2]{import, dir, range},
+keywords=[3]{__init__},
+emph={self},
+emphstyle={\self},
+%
+}}
+
+% C style for highlighting
+\newcommand\cstyle{\lstset{
+  %language=C,
+  showspaces=false,
+  showtabs=false,
+  showstringspaces=false,
+  tabsize=2,
+  basicstyle=\ttfamily\scriptsize\color{black},
+  backgroundcolor=\color{Background},
+  language=C,
+  breaklines=true,
+  % Comments
+  commentstyle=\color{Comments}\slshape,
+  % Strings
+  stringstyle=\color{Strings},
+  %keywordstyle=\color{Keywords}\ttfamily,
+  keywordstyle={\color{Keywords}\bfseries},
+  keywordstyle=[2]{\color{Magenta}\bfseries},
+  keywordstyle=[3]{\color{deepred}\bfseries},
+  keywordstyle=[4]{\color{MidnightBlue}\bfseries},
+  keywords={for, if, else, return, break, continue, do, double, float, int, char, enum, struct, long, signed, include},
+  keywords=[2]{fprintf, sprintf, printf, scanf, sscanf, fscanf},
+  keywords=[3]{class_call, class_test, class_alloc, class_calloc,class_define_index},
+  keywords=[4]{stderr, stdout, stdin},
+  stringstyle=\color{Strings}\ttfamily,
+  commentstyle=\color{Comments}\slshape,
+  morecomment=[l][\color{magenta}]{\#},
+  morecomment=[s][\color{Strings}]{"}{"},
+  morecomment=[s][\color{Strings}]{'}{'},
+}}
+
+% C style for highlighting
+\newcommand\smallcstyle{\lstset{
+		%language=C,
+		showspaces=false,
+		showtabs=false,
+		showstringspaces=false,
+		tabsize=2,
+		basicstyle=\ttfamily\tiny\color{black},
+		backgroundcolor=\color{Background},
+		language=C,
+		breaklines=true,
+		% Comments
+		commentstyle=\color{Comments}\slshape,
+		% Strings
+		stringstyle=\color{Strings},
+		%keywordstyle=\color{Keywords}\ttfamily,
+		keywordstyle={\color{Keywords}\bfseries},
+		keywordstyle=[2]{\color{Magenta}\bfseries},
+		keywordstyle=[3]{\color{deepred}\bfseries},
+		keywordstyle=[4]{\color{MidnightBlue}\bfseries},
+		keywords={for, if, else, return, break, continue, do, double, float, int, char, enum, struct, long, signed, include},
+		keywords=[2]{fprintf, sprintf, printf, scanf, sscanf, fscanf},
+		keywords=[3]{class_call, class_test, class_alloc, class_calloc},
+		keywords=[4]{stderr, stdout, stdin},
+		stringstyle=\color{Strings}\ttfamily,
+		commentstyle=\color{Comments}\slshape,
+		morecomment=[l][\color{magenta}]{\#},
+		morecomment=[s][\color{Strings}]{"}{"},
+		morecomment=[s][\color{Strings}]{'}{'},
+}}
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+% C new environnement
+% Python environment
+\lstnewenvironment{class}[1][]
+{
+\cstyle
+\lstset{moredelim=[is][\color{red}]{<@}{@>},#1}
+}
+{}
+
+\lstnewenvironment{smallclass}[1][]
+{
+	\smallcstyle
+	\lstset{moredelim=[is][\color{red}]{<@}{@>},#1}
+}
+{}
+% C for external files
+\newcommand\cexternal[2]{{ 
+\cstyle
+\lstinputlisting[#1]{#2}}}
+
+\newcommand\cinline[1]{{\cstyle\lstinline[]!#1!}}
+
+\newcommand{\equalhat}{\mathrel{\stackon[1.5pt]{=}{\stretchto{%
+				\scalerel*[\widthof{=}]{\wedge}{\rule{1ex}{3ex}}}{0.5ex}}}}
+
+% Personal colors
+\newcommand{\mygray}{\only{\color{gray}}}
+\newcommand{\mywhite}{\only{\color{white}}}
+\newcommand{\myblack}{\only{\color{black}}}
+\newcommand{\Blue}{\color{Blue}}
+
+%\newcommand{\Red}{\color{BrickRed}}
+\newcommand{\Red}{\color{RWTHred}}
+\newcommand{\Green}{\color{PineGreen}}
+\newcommand{\Purple}{\color{Mulberry}}
+\newcommand{\Grey}{\color{gray}}
+
+\renewcommand\mathfamilydefault{\rmdefault}
+\usetheme{Warsaw}
+\usecolortheme{whale}
+
+% particular color theme
+\setbeamercolor{normal text}{fg=RWTHbluedark}
+\setbeamercolor{palette primary}{bg=RWTHmagentalight,fg=black}
+\setbeamercolor{palette secondary}{bg=RWTHbordeaux,fg=white}
+\setbeamercolor{palette tertiary}{bg=RWTHorange,fg=white}
+\setbeamercolor{palette quaternary}{bg=RWTHbordeaux,fg=white}
+\setbeamercolor{structure}{fg=RWTHbordeaux} % itemize, enumerate, etc
+\setbeamercolor{block title}{bg=RWTHbordeaux,fg=white}
+
+\makeatletter
+\renewcommand\verbatim@font{\color{black}\normalfont\ttfamily}
+\makeatletter
+
+\title[CLASS Basics\hspace{25mm} \insertframenumber/\inserttotalframenumber]{Cosmological Linear Anisotropy Solving System {\scshape (CLASS)}}
+
+\newcommand{\location}{Les Karellis}
+\newcommand{\ecolefromdate}{17}
+\newcommand{\ecoletodate}{30}
+\author[\ecolefromdate-\ecoletodate.08.2025 \hspace{15mm} M. Mosbech]{Markus R. Mosbech}
