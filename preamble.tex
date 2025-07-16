@@ -12,7 +12,7 @@
 \usepackage{amssymb}
 \usepackage{scalerel,stackengine,amsmath}
 
-\usepackage{ulem}
+\usepackage[normalem]{ulem}
 \def\Put(#1,#2)#3{\leavevmode\makebox(0,0){\put(#1,#2){#3}}}
 
 \usepackage{tikz}
@@ -117,10 +117,9 @@
 \hypersetup{urlcolor=magenta}
 
 
-
 % Default fixed font does not support bold face
-\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
-\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
+% \DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{12} % for bold
+% \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{12}  % for normal
 
 
 % Python style for highlighting
@@ -274,6 +273,12 @@ emphstyle={\self},
 \usetheme{Warsaw}
 \usecolortheme{whale}
 
+\usepackage[T1]{fontenc}
+\usepackage[usefilenames,DefaultFeatures={Ligatures=Common}]{plex-otf} %
+\usefonttheme{serif}
+\setbeamertemplate{itemize item}[circle]
+% \renewcommand{\labelitemi}{$\circ$}
+
 % particular color theme
 \setbeamercolor{normal text}{fg=RWTHbluedark}
 \setbeamercolor{palette primary}{bg=RWTHmagentalight,fg=black}
@@ -289,6 +294,8 @@ emphstyle={\self},
 
 \title[CLASS Basics\hspace{25mm} \insertframenumber/\inserttotalframenumber]{Cosmological Linear Anisotropy Solving System {\scshape (CLASS)}}
 
+\newcommand{\CLASS}{\texttt{class}}
+\newcommand{\classy}{\texttt{classy}}
 \newcommand{\location}{Les Karellis}
 \newcommand{\ecolefromdate}{17}
 \newcommand{\ecoletodate}{30}

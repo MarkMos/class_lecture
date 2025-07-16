@@ -8,7 +8,7 @@
 \scriptsize
 
 \begin{frame}[fragile]
-\frametitle{{\tt \Red class} in \location}
+\frametitle{{\Red \CLASS{}} in \location}
 
 \mbox{}\\\mbox{}\\
 What to expect in this first lecture:
@@ -16,11 +16,11 @@ What to expect in this first lecture:
 \bgroup 
 \def\arraystretch{1.15}
 \begin{tabular}{lll}
-$\bullet$&Basics:& Why use {\Red \tt class}?\\
+$\bullet$&Basics:& Why use {\Red \CLASS{}}?\\
 $\bullet$&Usage:& Installation\\
-$\bullet$&Usage:& Terminal\\
-$\bullet$&Usage:& Plotting\\
-$\bullet$&Usage:& Python/Jupyter \\
+% $\bullet$&Usage:& Terminal\\
+% $\bullet$&Usage:& Plotting\\
+$\bullet$&Usage:& Python Interface \\
 $\bullet$&Usage:& Samplers \\
 $\bullet$&Basics:& Existing Species \\
 $\bullet$&Basics:& Module Overview \\
@@ -28,8 +28,60 @@ $\bullet$&Basics:& Module Overview \\
 \egroup
 
 \mbox{}\\
-We will learn {\Red how to use \tt class} and {\Red which models} can be run with it.\\\mbox{}\\
+We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with it.\\\mbox{}\\
 % \begin{center}\includegraphics[width=8cm,angle=0]{logo-ecole-300.png}\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{What is an Einstein-Boltzmann solver?}
+
+	Often just called a \emph{Boltzmann code} for brevity, a typical Boltzmann code will:
+	\vspace{0.5\baselineskip}
+	\begin{itemize}
+		\item Solve coupled Einstein and Boltzmann equations.\\
+		\item Generally work at linear level in perturbation theory. \\
+		\item Compute global (Background+Themodynamic) quantities \emph{and} perturbations.
+	\end{itemize}
+
+	% \mbox{
+	\begin{equation}
+		\underbrace{G_{\mu \nu} = 8 \pi T_{\mu \nu}}_{\text{Einstein-equation}} \qquad \qquad \underbrace{\frac{\mathrm{d} f}{\mathrm{d} \lambda} = C[f]}_{\text{Boltzmann-equation}}
+	\end{equation}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Why use a Boltzmann code?}
+	Modern Boltzmann codes offer:
+	\vspace{0.5\baselineskip}
+	\begin{itemize}
+		\item History of the universe at the global level ($H(z)$, $\rho_i(z)$, etc.)
+		\item Thermal history of the universe ($T_b(z)$, $x_e$, $\tau$, etc.)
+		\item Evolution of (linear) perturbations ($\delta_i$, $\theta_i$, $\psi$, $\phi$, etc.)
+		\item Fourier space transfer functions ($T(k)$)
+		\item CMB spectra, both lensed and unlensed ($C_\ell^{TT}$,$C_\ell^{TE}$,$C_\ell^{EE}$,$C_\ell^{BB}$)
+		\item Linear matter power spectrum, galaxy counts, cosmic shear ($\xi^\pm$,$C_\ell^{dd}$,$P_\mathrm{lin}(k)$)
+		\item Emulated non-linear power spectra
+		\item CMB spectral distortions
+	\end{itemize}
+	All computed in a matter of seconds!
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Why use a Boltzmann code?}
+	This has several use cases:
+	\vspace{0.5\baselineskip}
+	\begin{itemize}
+		\item Analysis of CMB experiments
+		\item Analysis of LSS experiments
+		\item Initial conditions for non-linear simulations ($N$-body, etc.)
+		\item Consistent treatment of background/thermodynamic evolution
+	\end{itemize}
+	All easy to to with {\Red \CLASS{}}!\\
+		\vspace{\baselineskip}
+	Fast execution $\Rightarrow$ ideal for use in an MCMC pipeline.
 
 \end{frame}
 

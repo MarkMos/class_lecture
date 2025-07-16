@@ -12,14 +12,15 @@ APP = ./appendix
 FIGS = ./figures
 TIKZ = ./tikz2pdf
 
-all: CLASS_lvl1.pdf
+all: CLASS_lec_1.pdf
 
 
-CLASS_lvl1.pdf: CLASS_lvl1.tex 
+CLASS_lec_1.pdf: CLASS_lec_1.tex preamble.tex class_lecture_firstslide.tex
+	lualatex $<
 	lualatex $<
 
 clean:
-	$(RM) $(AUX) $(DPTH) $(LOG) $(XML) $(NAV) $(SNM) $(VRB) *.bbl *.blg *.bcf *.out *.synctex.gz *.toc *.ilg *.idx *.ind *.lot *.lof CLASS_lvl1.pdf CLASS_lvl2.pdf
+	$(RM) $(AUX) $(DPTH) $(LOG) $(XML) $(NAV) $(SNM) $(VRB) *.bbl *.blg *.bcf *.out *.synctex.gz *.toc *.ilg *.idx *.ind *.lot *.lof CLASS_lec_1.pdf CLASS_lec_2.pdf
 
 remake:
-	$(RM) $(TIKZ)/* $(AUX) $(DPTH) $(LOG) $(XML)  $(NAV) $(SNM) $(VRB) *.bbl *.blg *.bcf *.out *.synctex.gz *.toc *.ilg *.idx *.ind *.md5 *.lot *.lof CLASS_lvl1.pdf
+	$(RM) $(TIKZ)/* $(AUX) $(DPTH) $(LOG) $(XML)  $(NAV) $(SNM) $(VRB) *.bbl *.blg *.bcf *.out *.synctex.gz *.toc *.ilg *.idx *.ind *.md5 *.lot *.lof CLASS_lec_1.pdf
