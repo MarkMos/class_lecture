@@ -56,14 +56,14 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
 	Modern Boltzmann codes offer:
 	\vspace{0.5\baselineskip}
 	\begin{itemize}
-		\item History of the universe at the global level ($H(z)$, $\rho_i(z)$, etc.)
-		\item Thermal history of the universe ($T_b(z)$, $x_e$, $\tau$, etc.)
-		\item Evolution of (linear) perturbations ($\delta_i$, $\theta_i$, $\psi$, $\phi$, etc.)
-		\item Fourier space transfer functions ($T(k)$)
-		\item CMB spectra, both lensed and unlensed ($C_\ell^{TT}$,$C_\ell^{TE}$,$C_\ell^{EE}$,$C_\ell^{BB}$)
-		\item Linear matter power spectrum, galaxy counts, cosmic shear ($\xi^\pm$,$C_\ell^{dd}$,$P_\mathrm{lin}(k)$)
-		\item Emulated non-linear power spectra
-		\item CMB spectral distortions
+		\item History of the universe at the global level ($H(z)$, $\rho_i(z)$, etc.) \pause
+		\item Thermal history of the universe ($T_b(z)$, $x_e$, $\tau$, etc.) \pause
+		\item Evolution of (linear) perturbations ($\delta_i$, $\theta_i$, $\psi$, $\phi$, etc.) \pause
+		\item Fourier space transfer functions ($T(k)$) \pause
+		\item CMB spectra, both lensed and unlensed ($C_\ell^{TT}$,$C_\ell^{TE}$,$C_\ell^{EE}$,$C_\ell^{BB}$) \pause
+		\item Linear matter power spectrum, galaxy counts, cosmic shear ($\xi^\pm$,$C_\ell^{dd}$,$P_\mathrm{lin}(k)$) \pause
+		\item Emulated non-linear power spectra \pause
+		\item CMB spectral distortions \pause
 	\end{itemize}
 	All computed in a matter of seconds!
 
@@ -84,6 +84,95 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
 	Fast execution $\Rightarrow$ ideal for use in an MCMC pipeline.
 
 \end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Why use \CLASS{}?}
+	\CLASS{} is:
+	\vspace{0.5\baselineskip}
+	\begin{itemize}
+		\item Accurate: \CLASS{} \& \texttt{camb} cross-check each other
+		\item Versatile: Interfaces with \texttt{MontePython}, \texttt{Cobaya}, \texttt{Cosmosis}, \texttt{Procoli}, \texttt{CosmoPower}, \texttt{OL\'E}, \texttt{CONNECT}, and others!
+		\item Comprehensive: Computes a wide range of cosmological observables for a large selection of models beyond $\Lambda$CDM.
+		\item Modular and well-documented: ReadTheDocs page and Doxygen documentation, thoroughly commented source code, easy to modify
+	\end{itemize}
+	All strong arguments to use {\Red \CLASS{}}!\\
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Installing \CLASS{}}
+
+	% \begin{columns}
+    % \begin{column}{0.5\linewidth}
+	\begin{minipage}[t][0.8\textheight][t]{.45\textwidth}
+      \begin{block}{Using \CLASS{}}
+		\begin{minipage}[t][0.42\textheight][t]{\textwidth}
+        If you have no intention of modifying source code:
+		\begin{class}
+> pip install classy
+		\end{class}
+		And the \CLASS{} wrapper will be ready to use in your Python environment.\\
+		\\
+		This is the easiest way to install.
+		\end{minipage}
+      \end{block}
+	  \end{minipage}
+	  \hfill
+    % \end{column}
+    % \begin{column}{0.5\linewidth}
+	\begin{minipage}[t][0.8\textheight][t]{.45\textwidth}
+      \begin{block}{Modifying \CLASS{}}
+		\begin{minipage}[t][0.42\textheight][t]{\textwidth}
+		If you wish to modify source code:
+        \begin{class}
+> git clone git@github.com:lesgourg/class_public.git class
+> cd class/
+> make clean; make -j
+		\end{class}
+	  The wrapper can be used in your Python environment, and the binary executable can be called from the terminal.
+	  \end{minipage}
+      \end{block}
+	  \end{minipage}
+%     \end{column}
+%   \end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Documentation}
+\begin{enumerate}
+	\item Basic information and links:\pause
+	\begin{itemize}
+		\item
+		{\scriptsize in the historical {\tt \Red class} webpage \url{http://class-code.net}}\pause
+		\item
+		{\scriptsize in the pdf manual in \cinline{doc/manual/CLASS\_MANUAL.pdf}} \pause
+		\item {\scriptsize the online documentation page (from the previous page, or from \url{https://github.com/lesgourg/class_public/wiki}, click on the link {\tt \Red{online html documentation}})}
+					%\begin{center}
+					%\includegraphics[height=6cm,angle=0]{figs/rtfm.png}
+					%\end{center}
+		\item {\scriptsize First three subsections: }
+		\begin{itemize}\item {\scriptsize Installation instructions}
+			\item {\scriptsize References to many papers for the physics}
+			\item {\scriptsize General overview (architecture, input/output, general principles)}
+		\end{itemize}
+	\end{itemize}
+	\pause
+	\item More advanced:
+	\begin{itemize}
+		\item {\scriptsize Old course notes from previous years on \url{https://schoeneberg.github.io/} under ``Resources''}
+		\item {\scriptsize several detailed courses on Julien's course webpage \url{https://lesgourg.github.io/courses.html}, especially the courses from Tokyo and NYC}
+		\item {\scriptsize Full auto-generated documentation with dependence tree.}
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{The code structure}
+
+
+\end{frame}
+
 
 %\begin{frame}[fragile]
 %\frametitle{Context}
