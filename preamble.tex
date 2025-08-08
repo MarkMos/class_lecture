@@ -3,7 +3,8 @@
 \usepackage{graphicx}
 \usepackage{wasysym}
 \usepackage{hyperref}
-\definecolor{links}{HTML}{2A1B81}
+% \definecolor{links}{HTML}{2A1B81}
+\definecolor{links}{RGB}{122,111,172}
 \hypersetup{colorlinks,linkcolor=,urlcolor=links}
 \usepackage{fancyhdr}
 \usepackage{multicol}
@@ -11,6 +12,7 @@
 \usepackage{float}
 \usepackage{amssymb}
 \usepackage{scalerel,stackengine,amsmath}
+\usepackage{makecell}
 
 \usepackage[normalem]{ulem}
 \def\Put(#1,#2)#3{\leavevmode\makebox(0,0){\put(#1,#2){#3}}}
@@ -29,7 +31,8 @@
 		minimum height=1cm,
 		align=center, 
 		draw=black, 
-		fill=red!30
+		fill=RWTHbluelight,
+		text=black
 	},
 	process/.style={
 		rectangle, 
@@ -37,7 +40,8 @@
 		minimum height=1cm, 
 		align=center, 
 		draw=black, 
-		fill=blue!30
+		fill=RWTHmagentalight,
+		text=black
 	},
 	decision/.style={
 		rectangle, 
@@ -88,12 +92,15 @@
 \definecolor{MatchingBrackets}{rgb}{0.25,0.5,0.5}
 \definecolor{Keywords}{rgb}{0,0,0.5}
 \definecolor{Strings}{rgb}{0,0.63,0}
-\definecolor{Comments}{rgb}{0.4,0.4,0.4}
+% \definecolor{Comments}{rgb}{0.4,0.4,0.4}
+\definecolor{Comments}{rgb}{0,0.4,0}
 \definecolor{Backquotes}{rgb}{0,0,0}
 \definecolor{Classname}{rgb}{0,0,0}
 \definecolor{FunctionName}{rgb}{0,0,0}
 \definecolor{Operators}{rgb}{0,0,0}
 \definecolor{Background}{rgb}{0.93,0.93,0.93}
+
+\definecolor{MyDarkGray}{RGB}{40,40,40}
 
 \definecolor{RWTHbluedark}{RGB}{0,84,159}
 \definecolor{RWTHbluelight}{RGB}{142,186,229}
@@ -114,7 +121,7 @@
 %\usepackage[urlcolor=magenta]{hyperref}
 \usepackage{hyperref}
 \usepackage{wasysym}
-\hypersetup{urlcolor=magenta}
+\hypersetup{urlcolor=links}
 
 
 % Default fixed font does not support bold face
@@ -180,7 +187,7 @@ emphstyle={\self},
   keywords=[4]{stderr, stdout, stdin},
   stringstyle=\color{Strings}\ttfamily,
   commentstyle=\color{Comments}\slshape,
-  morecomment=[l][\color{magenta}]{\#},
+  morecomment=[l][\color{Comments}]{\#},
   morecomment=[s][\color{Strings}]{"}{"},
   morecomment=[s][\color{Strings}]{'}{'},
 }}
@@ -211,7 +218,7 @@ emphstyle={\self},
 		keywords=[4]{stderr, stdout, stdin},
 		stringstyle=\color{Strings}\ttfamily,
 		commentstyle=\color{Comments}\slshape,
-		morecomment=[l][\color{magenta}]{\#},
+		morecomment=[l][\color{Comments}]{\#},
 		morecomment=[s][\color{Strings}]{"}{"},
 		morecomment=[s][\color{Strings}]{'}{'},
 }}
@@ -284,7 +291,8 @@ emphstyle={\self},
 % \renewcommand{\labelitemi}{$\circ$}
 
 % particular color theme
-\setbeamercolor{normal text}{fg=RWTHbluedark}
+\setbeamercolor{normal text}{fg=MyDarkGray}
+% \setbeamercolor{normal text}{fg=RWTHbluedark}
 \setbeamercolor{palette primary}{bg=RWTHmagentalight,fg=black}
 \setbeamercolor{palette secondary}{bg=RWTHbordeaux,fg=white}
 \setbeamercolor{palette tertiary}{bg=RWTHorange,fg=white}
