@@ -10,36 +10,38 @@
 \begin{frame}[fragile]
 \frametitle{{\Red \CLASS{}} in \location}
 
-\mbox{}
-What to expect in this {\itshape advanced} lecture:
+\mbox{}\\\mbox{}\\
+What to expect in these lectures:
 \vspace*{0.5\baselineskip}\mbox{}
 \bgroup 
 \def\arraystretch{1.15}
 \begin{tabular}{lll}
-	$\bullet$&Theory:& What is {\Red \tt class} based upon?\\
-	$\bullet$&Coding:& Structure of {\Red \tt class}\\
-	$\bullet$&Coding:& Essential rules and conventions\\
-	$\bullet$&Coding:& Implementing features (C and python)\\
-	$\bullet$&Coding:& Using MontePython/Cobaya with {\Red \tt class}
+$\bullet$&Basics:& Why use {\Red \CLASS{}}?\\
+$\bullet$&Usage:& Installation\\
+$\bullet$&Usage:& Python Interface \\
+$\bullet$&Basics:& Existing Species \\
+$\bullet$&Basics:& Module Overview \\
+$\bullet$&Theory:& What is {\Red \tt class} based upon?\\
+$\bullet$&Coding:& Implementing features
 \end{tabular}
 \egroup
 
 \mbox{}\\
-We will learn {\Red the theory behind \tt class} and the fundamental rules of its {\Red code base}.\\\mbox{}\\
-% \begin{center}\includegraphics[width=8cm,angle=0]{logo-ecole-300.png}\end{center} 
+We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with it.\\\mbox{}\\
+\begin{center}\includegraphics[width=8cm,angle=0]{Figures/logo-ecole-300.png}\end{center}
 
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{{\Red \CLASS{}} Theory}
+% \begin{frame}[fragile]
+% \frametitle{{\Red \CLASS{}} Theory}
 
-\begin{enumerate}
-	\item Fundamental layout of Einstein-Boltzmann solvers
-	\item Essential steps for each module
-	\item A few details for each of these steps
-\end{enumerate}
+% \begin{enumerate}
+% 	\item Fundamental layout of Einstein-Boltzmann solvers
+% 	\item Essential steps for each module
+% 	\item A few details for each of these steps
+% \end{enumerate}
 
-\end{frame}
+% \end{frame}
 
 \begin{frame}[fragile]
 	\frametitle{Fundamental layout of Einstein-Boltzmann solvers}
@@ -92,268 +94,22 @@ We will learn {\Red the theory behind \tt class} and the fundamental rules of it
 
 % \section{Modules}
 
-%%%%%%%%% INPUT MODULE
 
-% \subsection{Input Module}
-
-\begin{frame}[fragile]
-	\frametitle{Essential steps in Einstein-Boltzmann solver}
-	
-	{\bf Module 1. Input}\\
-	\mbox{}\\
-	Read in input files, take care of \textit{shooting}.
-	
-	\begin{class}
-h = 0.7
-#H0 = 70
-Omega_m = 0.3
-#omega_m = 0.14
-sigma8=0.8
-	\end{class}
-	
-	\mbox{}\\
-	Special care for equivalent/unknown parameters
-	
-\end{frame}
-
-\begin{frame}[fragile]
-	\frametitle{Input management in {\Red \CLASS{}}}
-	
-	\begin{block}{~~~~~~~~~~~~~~~~~~~~~~~~~~~Terminal~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Python wrapper}
-		\begin{columns}
-			\begin{column}{0.5\textwidth} 
-				\begin{center}
-					file \cinline{xxx.ini}\\
-					$\downarrow$\\
-					\cinline{input_init(...)}\\
-					(parser)\\
-					$\downarrow$\\
-				\end{center}
-			\end{column}
-			\begin{column}{0.5\textwidth} 
-				\begin{center}
-					\mbox{ }\\
-					\mbox{ }\\
-					\mbox{ }\\
-					\cinline{.set(...)}\\
-					$\downarrow$\\
-				\end{center}
-			\end{column}
-		\end{columns}
-		\vspace{-0.3cm}
-		\begin{center}
-			\cinline{struct file_content fc;} (all parameter names/values stored as arrays of strings)\\
-			$\downarrow$\\
-			\cinline{input_read_from_file(...)}\\
-			$\downarrow$\\
-			\cinline{input_read_parameters(...)}\\
-			(assign all default values + interprete input + update some parameters)\\
-			$\downarrow$\\
-			Only {\it relevant} parameters get stored in the structures of each module
-		\end{center}
-	\end{block}
-\end{frame}
-
-\begin{frame}[fragile]
-	\frametitle{Input management in {\Red \CLASS{}}}
-	
-	For indirect parameters, use {\Red shooting method}\\
-	\mbox{ }\\
-	
-	Repeated calls of \cinline{input_read_parameters(...)}, {\Red \texttt{class}} executions, from \cinline{input_read_from_file(...)} until shooting target is met.\\
-	\mbox{ }\\
-	
-	\pause
-	Example:\\
-	How would you code the input parameter $\theta_s$?\\
-	Use approximate formula $\to$ inflexible, inaccurate\\
-	\mbox{ }\\
-	
-	\pause
-	Try out a few values and narrow down (Example: User wants $100 \theta_s = 1.04325$)
-	\begin{center}
-		\begin{tabular}{|l|r|}
-			$h$ & $100 \theta_s$ \\
-			\hline
-			{\Green 0}.7 & {\Green 1.0}522492086422521 \\
-			{\Green 0.6}5 & {\Green 1.0}270326366580724 \\
-			{\Green 0.68}215616173 & {\Green 1.043}7999980620178 \\
-			{\Green 0.681}10138476 & {\Green 1.0432}819283581667 \\
-			{\Green 0.681036}37942 & {\Green 1.0432}499363679562 \\ 
-			{\Green 0.6810365}0871 & {\Green 1.0432}499921072458 \\
-			{\Green 0.681036527}01 & {\Green 1.04325000}79710365 \\
-			 ... & ...
-		\end{tabular}
-	\end{center}
-	
-	\pause
-	\mbox{}\\
-	In practice, use more sophisticated Ridder's method / Newton's method
-\end{frame}
-
-\begin{frame}[fragile]
-	\frametitle{Input management in {\Red \CLASS{}}}
-	
-	For {\Red shooting} parameters, establish mapping between {\it target parameter}, {\it unknown parameter} and {\it level}. Currently:
-	\begin{center}
-		\begin{tabular}{|c|c|c|}
-			\hline
-			target parameter & unknown parameter & level\\
-			\hline
-			$100 \times \theta_s$ & $h$ & thermodynamics \\
-			$\Omega_\mathrm{dcdm}$ & $\rho^\mathrm{ini}_\mathrm{dcdm}$ & background \\ \sout{$\sigma_8$} & \sout{$A_s$} & \sout{spectra} \\
-			... & ... & ...\\
-			\hline
-		\end{tabular}
-	\end{center}
-	... plus a few others (alternative parametrizations of decaying CDM, quintessence parameters).\\
-	\mbox{}\\
-	This is what is used e.g. in models of early dark energy!\\
-	
-	\vspace{1cm}
-	
-	If you need to add such parameters: see how it is done e.g. for \cinline{100*theta_s} and replicate the structure!\\
-	\mbox{}\\
-	{\color{purple}Special exception} $\tau_\mathrm{reio} \leftrightarrow z_\mathrm{reio}$ only concerns reionization and is done independently in \texttt{thermodynamics.c}
-	\mbox{}\\
-	{\Red New Special exception:} $\sigma_8 \leftrightarrow A_s$ can be very simply analytically re-scaled (multiplicative property), therefore done independently in \texttt{input.c}
-\end{frame}
-
-
-
-
-\begin{frame}[fragile]
-	\frametitle{Input management in {\Red \CLASS{}}}
-	
-	{\Red Budget equation:}
-	$$
-	\sum_X \Omega_X = 1 + \Omega_k
-	$$
-	To avoid over-constraining the input, one of the last three (\cinline{Omega_Lambda}, \cinline{Omega_fld}, \cinline{Omega_scf}) must be left unspecified and  {\Red \CLASS{}} will assign it using budget equation.\\
-	{\tiny Possibly more advanced in the future} 
-	\begin{itemize}
-		\item default: \cinline{Omega_Lambda} is automatically adjusted
-		\item if you pass \cinline{Omega_Lambda},  \cinline{Omega_fld}  is automatically adjusted
-		\item if you pass \cinline{Omega_Lambda} and \cinline{Omega_fld}: \cinline{Omega_scf} is automatically adjusted (if you allow, by setting to -1)
-	\end{itemize}
-	This allows whatever combination.\\
-	E.g. to get $\Lambda$ plus a DE fluid: \\
-	\cinline{Omega_Lambda=0.2}, \cinline{Omega_scf=0}~~~~or~~~~\cinline{Omega_fld=0.3}, \cinline{Omega_scf=0}
-	
-	\mbox{}\\
-	Helpful output by setting background verbose \texttt{\textgreater= 2}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Background
-
-% \subsection{Background Module}
-
-
-\begin{frame}[fragile]
-\frametitle{Essentials 2: Background}
-
-{\bf Module 2. Background}\\
-\mbox{}\\
-Get all background quantities as function of a scale factor $a$.
-
-
-% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{figs/background.png}
-
-\mbox{}\\
-This also gives mapping $a \leftrightarrow z \leftrightarrow t \leftrightarrow \mathrm{conf. time}$\\
-
-\end{frame}
-
-%%
-%$$
-%H^2 =  \frac{8 \pi G}{3} \sum_X \rho_X(a)    - \frac{K}{a^2}
-%$$
-
-\begin{frame}[fragile]
-\frametitle{The Background Module}
-
-Let's formalize problem!\\
-
-\vspace{0.2cm}
-
-Three types of parameters:
-\begin{itemize}
-	\item {\Purple $\{A\} $} are analytical functions of scale factor and {\Purple $\{B\}$} quantities.
-	%\pause
-	\item {\Purple $\{B\} $} need to be integrated over, and are used to compute {\Purple $\{A\}$}
-	%\pause
-	\item {\Purple $\{C\} $} also need to be integrated over, but are not used to compute {\Purple $\{A\}$}.
-\end{itemize}
-
-
-%\pause
-\vspace{0.2cm}
-\only<2>{
-$\Lambda$CDM and many simple extensions:
-\begin{itemize}
-	\item {\Purple $\{A\}$} $= \{\rho_i(a), p_i(a), H(a), ..., \}$ with e.g. $H(a) = \left( \sum_X \rho_x(a) - \frac{K}{a^2} \right)^{1/2}$
-	\item {\Purple $\{B\}$} $= \{\}$ (eliminated since {\tt \color{black} v3.0})
-	\item {\Purple $\{C\}$} $= \{t, \tau, r_s, D, f\}$ with e.g. $\frac{dt}{da} = 1/H(a)$, $\frac{d r_s}{d a} = c_s(a)/(a \cdot H(a))$
-\end{itemize}}
-
-% \pause
-% \vspace{0.2cm}
-\only<3>{
-Example of DE/DM/DR fluid: 
-\begin{itemize}
-	\item {\Purple $\{A\}$} $= \{\rho_i(a), p_i(a), H(a), ..., {\Red w_{\rm fld}(a)}\}$
-	\item {\Purple $\{B\}$} $= \{{\Red \rho_{\rm fld}}\}$ with $\frac{d \rho_{\rm fld}}{da} = -3  (1+w_{\rm fld}(a)) \rho_{\rm fld}$
-\end{itemize}}
-
-% \pause
-% \vspace{0.2cm}
-\only<4>{
-Exemple of extended cosmology with quintessence $\phi$: 
-\begin{itemize}
-	\item {\Purple $\{A\}$} $ = \{\rho_i, p_i, H, ..., {\Red V(\phi), \rho_\phi(\phi, \phi')} \}$ with e.g. $\rho_\phi(\phi, \phi') = \frac{1}{2} (\phi^\prime)^2 + V(\phi)$
-	\item {\Purple $\{B\}$} $ = \{{\Red \phi, \phi^\prime}\}$ with $\frac{d \phi}{d a} = \phi'/[aH(a)]$, $\frac{d \phi'}{da} = -2 \phi' - a V(\phi)/H(a)$
-\end{itemize}}
-
-% \pause
-% \vspace{0.2cm}
-\only<5>{
-Also Cold Dark Matter decaying into Dark Radiation...
-\begin{itemize}
-	\item {\Purple $\{A\}$} $= \{\rho_i, p_i, H, ... \}$
-	\item {\Purple $\{B\}$} $= \{{\Red \rho_{\rm dcdm}, {\Red \rho_{\rm dr}}}\}$ with $\frac{d \rho_{\rm dcdm}}{d a} = -3 \rho_{\rm dcdm} - \Gamma\!(a)/H(a) \cdot \rho_{\rm dcdm}$
-\end{itemize}}
-
-\end{frame}
-
-
-\begin{frame}[fragile]
-	\frametitle{The Background Module}
-
-	Small details:
-	\begin{itemize}
-		\item Quantities as $D_A(z), D_L(z), r_s, t_\mathrm{age}$ can be derived after all A,B,C are computed
-		\item Takes care of NCDM integration of phase-space distribution
-		\item Useful checks \& output
-		\item $\to$ Budget equation output at verbosity level 2
-	\end{itemize}
-	
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%% Thermodynamics
 
-% \subsection{Thermodynamics}
 
 \begin{frame}[fragile]
 \frametitle{Essentials 3: Thermodynamics}
 
-{\bf Module 3. Thermodynamics}\\
 \mbox{}\\
 Get all thermodynamics quantities as function of a time variable ({\Red \CLASS{}} $\rightarrow$ redshift $z$) after integrating differential equations like recombination equations:
 $$
 \frac{d x_e}{dz} , \frac{d T_b}{dz}= {\rm excitation}, {\rm ionization}, {\rm heating}, ... 
 $$
 \vspace{-0.5cm}\\
-% ~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{output_plots/thermo.pdf}\\
+{\centering
+\includegraphics[width=5cm,angle=0]{Figures/xe.pdf}\\}
 Then $x_e(z) \rightarrow \kappa'(z)$ (Thomson scattering rate)\\
 ~~~~~~~~~~~~~~~$\rightarrow \kappa(z)$ (Optical depth)\\
 ~~~~~~~~~~~~~~~$\rightarrow \exp(-\kappa(z))$ (factor for Integrated Sachs-Wolfe effect)\\
@@ -420,7 +176,7 @@ Solved numerically, basis of {\Red recfast}
 	
 	\pause
 	Further complication: Helium (higher elements don't contribute)\\
-	% ~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{output_plots/thermo2.pdf}\\
+	{\centering\includegraphics[width=5cm,angle=0]{Figures/xe.pdf}\\}
 \end{frame}
 
 
@@ -466,7 +222,7 @@ Recombination needs one more cosmological parameter: the {\Red primordial Helium
 	Mini-shooting to find $z_\mathrm{reio}$ for given $\tau_\mathrm{reio} = \kappa_\mathrm{reio}$. 
 	
 	Optical depth $\kappa(z)$ = inverse number of expected interactions  $\Rightarrow \kappa'(z) = a n_H x_e \sigma_T$\\
-	% \includegraphics[width=5cm,angle=0]{output_plots/thermo_kappa.pdf}\includegraphics[width=5cm,angle=0]{output_plots/thermo_kappa_integrated.pdf}\\
+	% \includegraphics[width=5cm,angle=0]{Figures/thermo_kappa.pdf}\includegraphics[width=5cm,angle=0]{Figures/thermo_kappa_integrated.pdf}\\
 \end{frame}
 
 
@@ -485,19 +241,27 @@ Recombination needs one more cosmological parameter: the {\Red primordial Helium
 	\end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]
+	\frametitle{Thermodynamics exercise}
+Let's check this with an exercise!
+
+Download the jupyter notebook \href{https://github.com/MarkMos/class_lecture/blob/main/notebooks/Exercise_thermodynamics_to_fill.ipynb}{Exercise\_thermodynamics\_to\_fill.ipynb} and follow the steps to plot the properties computed by the Thermodynamics module.
+
+
+\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%% Perturbations
 
 
 \begin{frame}[fragile]
 	\frametitle{Essentials 4: Perturbations}
 	
-	{\bf Module 4. Perturbations}\\
 	\mbox{}\\
 	\begin{itemize}
 		\item
 		Find all perturbations ($\delta_X(\tau,k)$, $\phi(\tau,k)$, ...)  by integrating ODEs for each independent wavenumber $k$, each mode (scalar/tensor), each initial condition (adiabatic/isocurvature)\\
-		% ~~~~~\includegraphics[width=8cm]{figs/BoltzmannDiagram.pdf}\\
-		% \vspace*{-5\baselineskip}\hspace*{-1em}
+		{\centering\includegraphics[width=8cm]{Figures/BoltzmannDiagram.pdf}\\}
+		\vspace*{-5\baselineskip}\hspace*{-1em}
 		{\Red Minimal set!} (no massive neutrinos, or advanced DM/DE)
 	\end{itemize}
 \end{frame}
@@ -592,7 +356,9 @@ Recombination needs one more cosmological parameter: the {\Red primordial Helium
 	\end{itemize}
 	
 	\vspace*{-1\baselineskip}
-	% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=4cm,height=4cm,angle=0]{approx_summary.pdf}
+	{\begin{flushright}
+		\includegraphics[width=4cm,height=4cm,angle=0]{Figures/approx_summary.pdf}
+	\end{flushright}}
 	
 \end{frame}
 
@@ -611,7 +377,9 @@ Source functions \\
 \end{itemize}
 All these are called {\it source functions} in {\Red \CLASS{}} 
 \end{itemize}
-% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[height=4cm,angle=0]{t0_lowres.jpg}
+{\begin{center}
+\includegraphics[height=4cm,angle=0]{Figures/t0_lowres.jpg}
+\end{center}}
 
 \end{frame}
 
@@ -646,13 +414,22 @@ User can select second case
 
 \end{frame}
 
+\begin{frame}[fragile]
+	\frametitle{Perturbations exercise}
+Let's check this with an exercise!
+
+Download the jupyter notebook \href{https://github.com/MarkMos/class_lecture/blob/main/notebooks/Exercise_perturbations_to_fill.ipynb}{Exercise\_perturbations\_to\_fill.ipynb} and follow the steps to plot the properties computed by the Perturbations module.
+
+
+\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%% Primordial
 
 
 \begin{frame}[fragile]
 \frametitle{Essentials 5: Primordial}
 
-{\bf Module 5. Primordial}\\
+
 \mbox{}\\
 Initial conditions for scalars (adiabatic, isocurvature) and tensors. 
 Linear theory $\Leftrightarrow$ Gaussian independent Fourier modes $\Leftrightarrow$ only power spectrum required
@@ -661,8 +438,10 @@ Linear theory $\Leftrightarrow$ Gaussian independent Fourier modes $\Leftrightar
 \item inflation mode: solve background+perturbation equation for single-field inflation and compute primordial scalar/tensor spectrum numerically
 \end{itemize}
 \mbox{ }\\
-% ~~~~~~~~~~~~~\includegraphics[height=4cm,angle=0]{iso.png}
-% ~~~~~~~~\includegraphics[height=4cm,angle=0]{pot.png}
+\begin{center}
+	\includegraphics[height=4cm,angle=0]{Figures/iso.png}
+	\includegraphics[height=4cm,angle=0]{Figures/pot.png}
+\end{center}
 
 \end{frame}
 
@@ -670,17 +449,17 @@ Linear theory $\Leftrightarrow$ Gaussian independent Fourier modes $\Leftrightar
 \begin{frame}[fragile]
 \frametitle{The Primordial module}
 
-{\bf D. Primordial spectra : modes}\\
+{\bf Primordial spectra : modes}\\
 \mbox{}\\
 \begin{tabular}{|c|c|c|}
 	\hline
 	\cinline{P\_k\_ini type =} & \cinline{modes =} & \cinline{ic = } \\ \hline
 	\hline
-	\cinline{analytic\_Pk} & one or several of \cinline{s,t} & one or several of \cinline{ad,bi,cdi,nid,niv} \\
+	\cinline{analytic\_Pk} & at least one: \cinline{s,t} & at least one: \cinline{ad,bi,cdi,nid,niv} \\
 	\cinline{inflation\_V} & \cinline{s,t} & \cinline{ad} \\
 	\cinline{inflation\_H} & \cinline{s,t} & \cinline{ad} \\
 	\cinline{inflation\_V\_end} & \cinline{s,t} & \cinline{ad} \\ \hline
-	\cinline{external\_Pk} & one or several of \cinline{s,t} & \cinline{ad} \\ \hline
+	\cinline{external\_Pk} & at least one: \cinline{s,t} & \cinline{ad} \\ \hline
 \end{tabular}
 
 \end{frame}
@@ -691,7 +470,7 @@ Linear theory $\Leftrightarrow$ Gaussian independent Fourier modes $\Leftrightar
 \begin{frame}[fragile]
 \frametitle{Essentials 6: Fourier}
 
-{\bf Module 6. Fourier space}\\
+
 \mbox{}\\
 \begin{itemize}
 \item
@@ -703,7 +482,7 @@ Approximation for non-linear spectrum $P^{NL}_m(k,z)$ based on prescriptions lik
 \item
 Keep also non-linear correction factor $\left(R^{NL}(k,z)\right)^2 = P^{NL}_m(k,z) / P_m(k,z)$ for e.g., CMB lensing, cosmic shear, number count $C_{\ell}$'s
 \end{itemize}
-% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{output_plots/plot2}
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{Figures/plot2}
 
 \end{frame}
 
@@ -714,7 +493,9 @@ Keep also non-linear correction factor $\left(R^{NL}(k,z)\right)^2 = P^{NL}_m(k,
 {\bf How to emulate non-linear evolution with a halo model?}\\
 \mbox{}\\
 {\Purple Halofit} or {\Purple HMcode} require non-linearity scale $R_\mathrm{NL}(z)$ such that $\sigma(R_\mathrm{NL}(z), z)=1$.\\
-% ~~~~~~~~~~~~~~~~\includegraphics[width=8cm,angle=0]{Halofit_zmax.pdf}\\
+\begin{center}
+\includegraphics[width=8cm,angle=0]{Figures/Halofit_zmax.pdf}\\	
+\end{center}
 To get $P^{\rm NL}(k,z)$ ar higher $z$ one should increase $k_{\rm max}$.
 
 \end{frame}
@@ -756,22 +537,14 @@ To get $P^{\rm NL}(k,z)$ ar higher $z$ one should increase $k_{\rm max}$.
 	{\bf Summary: Physically motivated halo formula, reproduces well current simulations} 
 \end{frame}
 
-% \begin{frame}[fragile]
-% 	\frametitle{Details of the steps in Einstein-Boltzmann solvers}
+\begin{frame}[fragile]
+	\frametitle{Fourier exercise}
+Let's check this with an exercise!
 
-% 	reproduces e.g. FrankenEmu \& Mira-Titan\\
-% \includegraphics[width=8cm,angle=270]{output_plots/MiraTitan_comparison_neutrinos.pdf}\\
-	
-% \end{frame}
+Download the jupyter notebook \href{https://github.com/MarkMos/class_lecture/blob/main/notebooks/Exercise_fourier_to_fill.ipynb}{Exercise\_fourier\_to\_fill.ipynb} and follow the steps to plot the properties computed by the Fourier module.
 
-% \begin{frame}[fragile]
-% 	\frametitle{Details of the steps in Einstein-Boltzmann solvers}
 
-% 	reproduces e.g. BAHAMAS (\& OWLS)
-% 	\includegraphics[width=8cm,angle=270]{output_plots/HMcode_feedback_model.pdf}\\
-	
-% \end{frame}
-
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%% Transfer + Harmonic
 
@@ -779,7 +552,6 @@ To get $P^{\rm NL}(k,z)$ ar higher $z$ one should increase $k_{\rm max}$.
 \begin{frame}[fragile]
 	\frametitle{Essentials 7+8: Transfer \& Harmonic}
 	
-	{\bf Module 7: Transfer \& Module 8: Harmonic}
 	\begin{columns}[T] % align columns
 	\begin{column}{0.56\textwidth}
 		\begin{center}
@@ -803,7 +575,7 @@ To get $P^{\rm NL}(k,z)$ ar higher $z$ one should increase $k_{\rm max}$.
 		\end{center}
 	\end{column}
 	\begin{column}{0.4\textwidth}
-		% \includegraphics[height=0.75\textheight]{figs/projection}
+		\includegraphics[height=0.75\textheight]{Figures/projection}
 	\end{column}
 	\end{columns}
 \end{frame}
@@ -820,7 +592,9 @@ $$
 $$
 $S(\tau,k)$ = source function from above.
 Role of Bessel: projection from Fourier to harmonic space ($\theta \, d_a(z_\mathrm{rec}) = \frac{\lambda}{2}$ gives precisely $l=k(\tau_0-\tau_\mathrm{rec})$):\\
-% ~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{smallangle.png}\\
+\begin{center}
+	\includegraphics[width=5cm,angle=0]{Figures/smallangle.png}\\
+\end{center}
 Curved space: spherical bessel functions $\rightarrow$ modified Bessel functions (hypergeometric)
 \end{frame}
 
@@ -835,7 +609,6 @@ applies not just to CMB $X\in\{T,E,B\}$ but also all LSS $C_\ell$'s (one $X$ per
 \item number count (galaxy clustering): $S(\tau,k)$ modeled fully relativistically (RSD, Doppler, lensing, other GR effects) 
 \item may include non-linear correction factors $R^{NL}(k,z)$
 \end{itemize}
-% ~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=5cm,angle=0]{output_plots/plot4}
 
 \end{frame}  
 
@@ -861,30 +634,6 @@ But $(S_T^1)'$, $(S_T^2)'$, $(S_T^2)''$ problematic! (Derivative of Einstein equ
 
 \end{frame}
 
-% \begin{frame}[fragile]
-% \frametitle{Details of the steps in Einstein-Boltzmann solvers}
-
-% Example of temperature source function in {\Red CAMB}:
-% \hspace*{-2em}
-% \begin{minipage}{1.1\textwidth}
-% \begin{class}
-% !Maple fortran output - see scal_eqs.map
-% ISW = (4.D0/3.D0*k*EV%Kf(1)*sigma+(-2.D0/3.D0*sigma-2.D0/3.D0*etak/adotoa)*k &
-% -diff_rhopi/k**2-1.D0/adotoa*dgrho/3.D0+(3.D0*gpres+5.D0*grho)*sigma/k/3.D0 &
-% -2.D0/k*adotoa/EV%Kf(1)*etak)*expmmu(j)
-% !The rest, note y(9)->octg, yprime(9)->octgprime (octopoles)
-% sources(1)= ISW +  ((-9.D0/160.D0*pig-27.D0/80.D0*ypol(2))/k**2*opac(j)+(11.D0/10.D0*sigma- &
-% 3.D0/8.D0*EV%Kf(2)*ypol(3)+vb-9.D0/80.D0*EV%Kf(2)*octg+3.D0/40.D0*qg)/k-(- &
-% 180.D0*ypolprime(2)-30.D0*pigdot)/k**2/160.D0)*dvis(j)+(-(9.D0*pigdot+ &
-% 54.D0*ypolprime(2))/k**2*opac(j)/160.D0+pig/16.D0+clxg/4.D0+3.D0/8.D0*ypol(2)+(- &
-% 21.D0/5.D0*adotoa*sigma-3.D0/8.D0*EV%Kf(2)*ypolprime(3)+vbdot+3.D0/40.D0*qgdot- &
-% 9.D0/80.D0*EV%Kf(2)*octgprime)/k+(-9.D0/160.D0*dopac(j)*pig-21.D0/10.D0*dgpi-27.D0/ &
-% 80.D0*dopac(j)*ypol(2))/k**2)*vis(j)+(3.D0/16.D0*ddvis(j)*pig+9.D0/ &
-% 8.D0*ddvis(j)*ypol(2))/k**2+21.D0/10.D0/k/EV%Kf(1)*vis(j)*etak   
-% \end{class}
-% \end{minipage}
-
-% \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Transfer \& Harmonic Modules}
@@ -919,14 +668,24 @@ C_\ell^{XY} = \int \frac{dk}{k}  \sum_{ij}  \Delta^X_{\ell \, i}(k)  \Delta^Y_{\
 $$
 with sum running over modes (scalar/tensor) and I.C. (adiabatic/isocurvature).\\
 \mbox{} \\
-% ~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=7cm,angle=0]{figs/cl_ST.pdf}
+\begin{center}
+\includegraphics[width=7cm,angle=0]{Figures/cl_ST.pdf}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Harmonic exercise}
+Let's check this with an exercise!
+
+Download the jupyter notebook \href{https://github.com/MarkMos/class_lecture/blob/main/notebooks/Exercise_harmonic_to_fill.ipynb}{Exercise\_harmonic\_to\_fill.ipynb} and follow the steps to plot the properties computed by the Harmonic module.
+
 
 \end{frame}
 
 \begin{frame}[fragile]
 \frametitle{Essentials 9: Lensing}
 
-{\bf Module 9. Lensing}\\
 \mbox{}\\
 \begin{itemize}
 \item
@@ -934,7 +693,9 @@ metric fluctuations $(\phi, \psi)$ $\rightarrow$ lensing potential source functi
 \item
 several quadratic sums over $C_{\ell_1}^{XY} C_{\ell_2}^{PP}$  $\rightarrow$ lensed CMB spectra $C_\ell^{TT,TE,EE,BB}$. Full-sky approach of Challinor \& Lewis 2005.
 \end{itemize}
-% ~~~~~~~~~~~~~~~~~~~~~~\includegraphics[width=7cm,angle=0]{figs/cltt_terms.pdf}
+\begin{center}
+	\includegraphics[width=7cm,angle=0]{Figures/cltt_terms.pdf}
+\end{center}
 
 \end{frame}
 
@@ -942,8 +703,7 @@ several quadratic sums over $C_{\ell_1}^{XY} C_{\ell_2}^{PP}$  $\rightarrow$ len
 
 \begin{frame}[fragile]
 	\frametitle{Essentials 10: Spectral Distortions}
-	
-	{\bf Module 10. Spectral distortions}\\
+
 	\begin{itemize}
 		\item
 		Computations using \texttt{CosmoTherm} to derive thermalization Green's function
@@ -956,7 +716,10 @@ several quadratic sums over $C_{\ell_1}^{XY} C_{\ell_2}^{PP}$  $\rightarrow$ len
 		a = \int \dot{Q} J_a(t) dt
 	\end{equation}
 	with branching function $J_a(t)$.\\[1ex]
-	% \includegraphics[width=0.6\textwidth]{figs/br_pca_edited2}
+
+	\begin{center}
+	\includegraphics[width=0.6\textwidth]{Figures/br_pca_edited.pdf}
+	\end{center}
 	
 \end{frame}
 
@@ -965,10 +728,9 @@ several quadratic sums over $C_{\ell_1}^{XY} C_{\ell_2}^{PP}$  $\rightarrow$ len
 
 \begin{frame}[fragile]
 	\frametitle{Essentials 11: Output}
-	
-	{\bf Module 11. Output}\\
 	\mbox{}\\
-	Writes output files with correct headers and data
+	Writes output files with correct headers and data.\\
+	If you are ever in doubt about \CLASS{} output units, check the headers of an output file.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Implementing Features

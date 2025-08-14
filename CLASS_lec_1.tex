@@ -11,25 +11,24 @@
 \frametitle{{\Red \CLASS{}} in \location}
 
 \mbox{}\\\mbox{}\\
-What to expect in this first lecture:
+What to expect in these lectures:
 \vspace*{0.5\baselineskip}\mbox{}
 \bgroup 
 \def\arraystretch{1.15}
 \begin{tabular}{lll}
 $\bullet$&Basics:& Why use {\Red \CLASS{}}?\\
 $\bullet$&Usage:& Installation\\
-% $\bullet$&Usage:& Terminal\\
-% $\bullet$&Usage:& Plotting\\
 $\bullet$&Usage:& Python Interface \\
-% $\bullet$&Usage:& Samplers \\
 $\bullet$&Basics:& Existing Species \\
 $\bullet$&Basics:& Module Overview \\
+$\bullet$&Theory:& What is {\Red \tt class} based upon?\\
+$\bullet$&Coding:& Implementing features
 \end{tabular}
 \egroup
 
 \mbox{}\\
 We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with it.\\\mbox{}\\
-% \begin{center}\includegraphics[width=8cm,angle=0]{logo-ecole-300.png}\end{center}
+\begin{center}\includegraphics[width=8cm,angle=0]{Figures/logo-ecole-300.png}\end{center}
 
 \end{frame}
 
@@ -102,8 +101,6 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
 \begin{frame}[fragile]
 	\frametitle{Installing \CLASS{}}
 
-	% \begin{columns}
-    % \begin{column}{0.5\linewidth}
 	\begin{minipage}[t][0.8\textheight][t]{.45\textwidth}
       \begin{block}{Using \CLASS{}}
 		\begin{minipage}[t][0.42\textheight][t]{\textwidth}
@@ -118,8 +115,6 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
       \end{block}
 	  \end{minipage}
 	  \hfill
-    % \end{column}
-    % \begin{column}{0.5\linewidth}
 	\begin{minipage}[t][0.8\textheight][t]{.45\textwidth}
       \begin{block}{Modifying \CLASS{}}
 		\begin{minipage}[t][0.42\textheight][t]{\textwidth}
@@ -133,8 +128,6 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
 	  \end{minipage}
       \end{block}
 	  \end{minipage}
-%     \end{column}
-%   \end{columns}
 
 \end{frame}
 
@@ -145,6 +138,7 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
 		\item The file {\Red \texttt{explanatory.ini}} lists all input parameters.\\
 		(downloadable from GitHub page if \classy{} installed via pip)\pause
 		\item {\Red \textbf{NEW!}} Documentation of the {\Red \classy{}} wrapper at \url{https://class-code.readthedocs.io}.\pause
+		\item {\Red \textbf{NEW!}} \CLASS{} LLM agent at \url{https://classclapp.streamlit.app/}.\pause
 		\item {\Red \textbf{Updated!}} Python docstrings in the {\Red \classy{}} wrapper.
 		\item \CLASS{} manual in repository \pause
 		\item Online documentation at \url{https://github.com/lesgourg/class_public/wiki} \pause
@@ -154,34 +148,17 @@ We will learn {\Red how to use \CLASS{}} and {\Red which models} can be run with
 
 \end{frame}
 
-% \begin{frame}[fragile]
-% 	\frametitle{Extra Documentation}
-% \begin{enumerate}
-% 	\item Basic information and links:\pause
-% 	\begin{itemize}
-% 		\item
-% 		{\scriptsize in the historical {\Red \CLASS{}} webpage \url{http://class-code.net}}\pause
-% 		\item
-% 		{\scriptsize in the pdf manual in \cinline{doc/manual/CLASS\_MANUAL.pdf}} \pause
-% 		\item {\scriptsize the online documentation page (from the previous page, or from \url{https://github.com/lesgourg/class_public/wiki}, click on the link {\tt \Red{online html documentation}})}
-% 					%\begin{center}
-% 					%\includegraphics[height=6cm,angle=0]{figs/rtfm.png}
-% 					%\end{center}
-% 		\item {\scriptsize First three subsections: }
-% 		\begin{itemize}\item {\scriptsize Installation instructions}
-% 			\item {\scriptsize References to many papers for the physics}
-% 			\item {\scriptsize General overview (architecture, input/output, general principles)}
-% 		\end{itemize}
-% 	\end{itemize}
-% 	\pause
-% 	\item More advanced:
-% 	\begin{itemize}
-% 		\item {\scriptsize Old course notes from previous years on \url{https://schoeneberg.github.io/} under ``Resources''}
-% 		\item {\scriptsize several detailed courses on Julien's course webpage \url{https://lesgourg.github.io/courses.html}, especially the courses from Tokyo and NYC}
-% 		\item {\scriptsize Full auto-generated documentation with dependence tree.}
-% 	\end{itemize}
-% \end{enumerate}
-% \end{frame}
+\begin{frame}[fragile]
+	\frametitle{Installing \CLASS{}}
+Let's take a few minutes to install class and confirm it is working!
+
+\begin{itemize}
+	\item If you have installed \classy{} via \texttt{pip}, try running the script \texttt{\href{https://github.com/MarkMos/class_lecture/blob/main/notebooks/classy_test.py}{classy\_test.py}}\\
+	\item If you have installed \CLASS{} via \texttt{git clone} and compiling, try also running \texttt{./class default.ini}
+\end{itemize}
+
+\end{frame}
+
 
 \begin{frame}[fragile]
 	\frametitle{The code structure}
@@ -671,6 +648,244 @@ parameter = value #comment behind parameter
 	\pause \node [process, on chain=going right,fill=RWTHbordeaux,text=white] {Input \& Output module \\ \texttt{input.c , output.c}};
 	\onslide<1->
 	\end{tikzpicture}
+\end{frame}
+
+%%%%%%%%% INPUT MODULE
+
+% \subsection{Input Module}
+
+\begin{frame}[fragile]
+	\frametitle{Essential steps in Einstein-Boltzmann solver}
+	\mbox{}\\
+	Read in input files, take care of \textit{shooting}.
+	
+	\begin{class}
+h = 0.7
+#H0 = 70
+Omega_m = 0.3
+#omega_m = 0.14
+sigma8=0.8
+	\end{class}
+	
+	\mbox{}\\
+	Special care for equivalent/unknown parameters
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Input management in {\Red \CLASS{}}}
+	
+	\begin{block}{~~~~~~~~~~~~~~~~~~~~~~~~~~~Terminal~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Python wrapper}
+		\begin{columns}
+			\begin{column}{0.5\textwidth} 
+				\begin{center}
+					file \cinline{xxx.ini}\\
+					$\downarrow$\\
+					\cinline{input_init(...)}\\
+					(parser)\\
+					$\downarrow$\\
+				\end{center}
+			\end{column}
+			\begin{column}{0.5\textwidth} 
+				\begin{center}
+					\mbox{ }\\
+					\mbox{ }\\
+					\mbox{ }\\
+					\cinline{.set(...)}\\
+					$\downarrow$\\
+				\end{center}
+			\end{column}
+		\end{columns}
+		\vspace{-0.3cm}
+		\begin{center}
+			\cinline{struct file_content fc;} (all parameter names/values stored as arrays of strings)\\
+			$\downarrow$\\
+			\cinline{input_read_from_file(...)}\\
+			$\downarrow$\\
+			\cinline{input_read_parameters(...)}\\
+			(assign all default values + interprete input + update some parameters)\\
+			$\downarrow$\\
+			Only {\it relevant} parameters get stored in the structures of each module
+		\end{center}
+	\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Input management in {\Red \CLASS{}}}
+	
+	For indirect parameters, use {\Red shooting method}\\
+	\mbox{ }\\
+	
+	Repeated calls of \cinline{input_read_parameters(...)}, {\Red \texttt{class}} executions, from \cinline{input_read_from_file(...)} until shooting target is met.\\
+	\mbox{ }\\
+	
+	\pause
+	Example:\\
+	How would you code the input parameter $\theta_s$?\\
+	Use approximate formula $\to$ inflexible, inaccurate\\
+	\mbox{ }\\
+	
+	\pause
+	Try out a few values and narrow down (Example: User wants $100 \theta_s = 1.04325$)
+	\begin{center}
+		\begin{tabular}{|l|r|}
+			$h$ & $100 \theta_s$ \\
+			\hline
+			{\Green 0}.7 & {\Green 1.0}522492086422521 \\
+			{\Green 0.6}5 & {\Green 1.0}270326366580724 \\
+			{\Green 0.68}215616173 & {\Green 1.043}7999980620178 \\
+			{\Green 0.681}10138476 & {\Green 1.0432}819283581667 \\
+			{\Green 0.681036}37942 & {\Green 1.0432}499363679562 \\ 
+			{\Green 0.6810365}0871 & {\Green 1.0432}499921072458 \\
+			{\Green 0.681036527}01 & {\Green 1.04325000}79710365 \\
+			 ... & ...
+		\end{tabular}
+	\end{center}
+	
+	\pause
+	\mbox{}\\
+	In practice, use more sophisticated Ridder's method / Newton's method
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Input management in {\Red \CLASS{}}}
+	
+	For {\Red shooting} parameters, establish mapping between {\it target parameter}, {\it unknown parameter} and {\it level}. Currently:
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			target parameter & unknown parameter & level\\
+			\hline
+			$100 \times \theta_s$ & $h$ & thermodynamics \\
+			$\Omega_\mathrm{dcdm}$ & $\rho^\mathrm{ini}_\mathrm{dcdm}$ & background \\ \sout{$\sigma_8$} & \sout{$A_s$} & \sout{spectra} \\
+			... & ... & ...\\
+			\hline
+		\end{tabular}
+	\end{center}
+	... plus a few others (alternative parametrizations of decaying CDM, quintessence parameters).\\
+	\mbox{}\\
+	This is what is used e.g. in models of early dark energy!\\
+	
+	\vspace{1cm}
+	
+	If you need to add such parameters: see how it is done e.g. for \cinline{100*theta_s} and replicate the structure!\\
+	\mbox{}\\
+	{\color{purple}Special exception} $\tau_\mathrm{reio} \leftrightarrow z_\mathrm{reio}$ only concerns reionization and is done independently in \texttt{thermodynamics.c}
+	\mbox{}\\
+	{\Red New Special exception:} $\sigma_8 \leftrightarrow A_s$ can be very simply analytically re-scaled (multiplicative property), therefore done independently in \texttt{input.c}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+	\frametitle{Input management in {\Red \CLASS{}}}
+	
+	{\Red Budget equation:}
+	$$
+	\sum_X \Omega_X = 1 + \Omega_k
+	$$
+	To avoid over-constraining the input, one of the last three (\cinline{Omega_Lambda}, \cinline{Omega_fld}, \cinline{Omega_scf}) must be left unspecified and  {\Red \CLASS{}} will assign it using budget equation.\\
+	{\tiny Possibly more advanced in the future} 
+	\begin{itemize}
+		\item default: \cinline{Omega_Lambda} is automatically adjusted
+		\item if you pass \cinline{Omega_Lambda},  \cinline{Omega_fld}  is automatically adjusted
+		\item if you pass \cinline{Omega_Lambda} and \cinline{Omega_fld}: \cinline{Omega_scf} is automatically adjusted (if you allow, by setting to -1)
+	\end{itemize}
+	This allows whatever combination.\\
+	E.g. to get $\Lambda$ plus a DE fluid: \\
+	\cinline{Omega_Lambda=0.2}, \cinline{Omega_scf=0}~~~~or~~~~\cinline{Omega_fld=0.3}, \cinline{Omega_scf=0}
+	
+	\mbox{}\\
+	Helpful output by setting background verbose \texttt{\textgreater= 2}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Background
+
+
+
+\begin{frame}[fragile]
+\frametitle{Essentials 2: Background}
+
+\mbox{}\\
+Get all background quantities as function of a scale factor $a$.
+
+
+{\centering\includegraphics[width=8cm,angle=0]{Figures/background.png}}
+\mbox{}\\
+This also gives mapping $a \leftrightarrow z \leftrightarrow t \leftrightarrow \mathrm{conf. time}$\\
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{The Background Module}
+
+Let's formalize problem!\\
+
+\vspace{0.2cm}
+
+Three types of parameters:
+\begin{itemize}
+	\item {\Purple $\{A\} $} are analytical functions of scale factor and {\Purple $\{B\}$} quantities.
+	\item {\Purple $\{B\} $} need to be integrated over, and are used to compute {\Purple $\{A\}$}
+	\item {\Purple $\{C\} $} also need to be integrated over, but are not used to compute {\Purple $\{A\}$}.
+\end{itemize}
+
+
+\vspace{0.2cm}
+\only<2>{
+$\Lambda$CDM and many simple extensions:
+\begin{itemize}
+	\item {\Purple $\{A\}$} $= \{\rho_i(a), p_i(a), H(a), ..., \}$ with e.g. $H(a) = \left( \sum_X \rho_x(a) - \frac{K}{a^2} \right)^{1/2}$
+	\item {\Purple $\{B\}$} $= \{\}$ (eliminated since {\tt \color{black} v3.0})
+	\item {\Purple $\{C\}$} $= \{t, \tau, r_s, D, f\}$ with e.g. $\frac{dt}{da} = 1/H(a)$, $\frac{d r_s}{d a} = c_s(a)/(a \cdot H(a))$
+\end{itemize}}
+
+\only<3>{
+Example of DE/DM/DR fluid: 
+\begin{itemize}
+	\item {\Purple $\{A\}$} $= \{\rho_i(a), p_i(a), H(a), ..., {\Red w_{\rm fld}(a)}\}$
+	\item {\Purple $\{B\}$} $= \{{\Red \rho_{\rm fld}}\}$ with $\frac{d \rho_{\rm fld}}{da} = -3  (1+w_{\rm fld}(a)) \rho_{\rm fld}$
+\end{itemize}}
+
+\only<4>{
+Exemple of extended cosmology with quintessence $\phi$: 
+\begin{itemize}
+	\item {\Purple $\{A\}$} $ = \{\rho_i, p_i, H, ..., {\Red V(\phi), \rho_\phi(\phi, \phi')} \}$ with e.g. $\rho_\phi(\phi, \phi') = \frac{1}{2} (\phi^\prime)^2 + V(\phi)$
+	\item {\Purple $\{B\}$} $ = \{{\Red \phi, \phi^\prime}\}$ with $\frac{d \phi}{d a} = \phi'/[aH(a)]$, $\frac{d \phi'}{da} = -2 \phi' - a V(\phi)/H(a)$
+\end{itemize}}
+
+\only<5>{
+Also Cold Dark Matter decaying into Dark Radiation...
+\begin{itemize}
+	\item {\Purple $\{A\}$} $= \{\rho_i, p_i, H, ... \}$
+	\item {\Purple $\{B\}$} $= \{{\Red \rho_{\rm dcdm}, {\Red \rho_{\rm dr}}}\}$ with $\frac{d \rho_{\rm dcdm}}{d a} = -3 \rho_{\rm dcdm} - \Gamma\!(a)/H(a) \cdot \rho_{\rm dcdm}$
+\end{itemize}}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{The Background Module}
+
+	Small details:
+	\begin{itemize}
+		\item Quantities as $D_A(z), D_L(z), r_s, t_\mathrm{age}$ can be derived after all A,B,C are computed
+		\item Takes care of NCDM integration of phase-space distribution
+		\item Useful checks \& output
+		\item $\to$ Budget equation output at verbosity level 2
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Background exercise}
+Let's end this first lecture with a hands-on exercise.
+
+Download the jupyter notebook \href{https://github.com/MarkMos/class_lecture/blob/main/notebooks/Exercise_background_to_fill.ipynb}{Exercise\_background\_to\_fill.ipynb} and follow the steps to plot the properties computed by the background module.
+
+
 \end{frame}
 
 % \begin{frame}
