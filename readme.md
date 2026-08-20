@@ -3,6 +3,7 @@ This repository serves as an archive of my class lecture notes. I will try to ke
 
 - Slides and notebooks for [TTK master student introduction at RWTH Aachen 2025](https://github.com/MarkMos/class_lecture/tree/aachen-2025)
 - Slides and notebooks for [École d'été Rodolphe Clédassou 2025](https://github.com/MarkMos/class_lecture/tree/ecole-euclid-2025)
+- Slides and notebooks for [École d'été Rodolphe Clédassou 2026](https://github.com/MarkMos/class_lecture/tree/ecole-euclid-2026)
 
 Introductory slides and exercises for [CLASS](https://github.com/lesgourg/class_public).
 
